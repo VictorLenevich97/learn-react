@@ -1,26 +1,40 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { Counter } from "../components/Counter";
+import { useSelector, useDispatch } from "react-redux";
 
-export const Home = ({ allowTeams, setAllowTeams }) => {
+import { login, logout } from "../store/rootStore/actions";
+
+export const Home = () => {
+  const isAuth = useSelector((store) => store.isAuth);
+  const dispatch = useDispatch();
+
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   return (
     <div>
-      <h2>Home page</h2>
-      <hr />
-      <div style={{ margin: "40px 0" }}>
-        <span>Is allow teams: {allowTeams ? "Yes" : "No"}</span>{" "}
-        <button
-          onClick={() => {
-            if (allowTeams) {
-              setAllowTeams(false);
-            } else {
-              setAllowTeams(true);
-            }
-          }}
-        >
-          {allowTeams ? "Don`t show page" : "Show page"}
-        </button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h2>Home page</h2>
+        <div>
+          <span>Is allow teams: {isAuth ? "Is auth" : "No auth"}</span>{" "}
+          <button
+            onClick={() => {
+              if (isAuth) {
+                dispatch(logout());
+              } else {
+                dispatch(login());
+              }
+            }}
+          >
+            {isAuth ? "Logout" : "Login"}
+          </button>
+        </div>
       </div>
       <hr />
       <div>
@@ -32,6 +46,8 @@ export const Home = ({ allowTeams, setAllowTeams }) => {
         <button>Search</button>
       </div>
       <p>Search resuls: {searchParams.get("search")}</p>
+
+      <Counter />
     </div>
   );
 };

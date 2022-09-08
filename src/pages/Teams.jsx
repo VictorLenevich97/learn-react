@@ -1,16 +1,7 @@
 import { mockTeams } from "../mock-data/mock-teams";
-import { useLayoutEffect } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
-export const Teams = ({ allowTeams }) => {
-  const navigate = useNavigate();
-
-  useLayoutEffect(() => {
-    if (!allowTeams) {
-      navigate("/");
-    }
-  }, [allowTeams]);
-
+export const Teams = () => {
   return (
     <div>
       <ul>

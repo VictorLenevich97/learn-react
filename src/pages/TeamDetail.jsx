@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 
 import { mockTeams } from "../mock-data/mock-teams";
 
@@ -6,6 +6,10 @@ export const TeamDetail = () => {
   const params = useParams();
 
   const currentData = mockTeams.find(({ id }) => id === +params.teamId);
+
+  if (!currentData) {
+    return <Navigate to="/teams" />;
+  }
 
   return (
     <div>
