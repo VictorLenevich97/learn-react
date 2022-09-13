@@ -4,7 +4,7 @@ const initialState = {
   isAuth: false,
 };
 
-function rootReducer(state = initialState, action) {
+function mainReducer(state = initialState, action) {
   switch (action.type) {
     case LOGIN:
       return { ...state, isAuth: true };
@@ -16,4 +16,4 @@ function rootReducer(state = initialState, action) {
   }
 }
 
-export default rootReducer;
+export default mainReducer;

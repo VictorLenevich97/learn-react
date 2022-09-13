@@ -1,57 +1,35 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "../layouts/Layout";
 import { PrivateRoute } from "./PrivateRoute";
-
-import { Account, Home, Teams, Settings, TeamDetail } from "../pages";
+import { Home, Posts, SignIn, NotFound } from "../pages";
+import { NOT_FOUND, SIGN_IN, POSTS, HOME } from "../constants/routes";
 
 export const MainRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+        <Route path={HOME} element={<Layout />}>
           <Route
-            path="teams"
+            index
             element={
               <PrivateRoute>
-                <Teams />
+                <Home />
               </PrivateRoute>
             }
           />
           <Route
-            path="/teams/:teamId/:teamName/show"
+            path={POSTS}
             element={
               <PrivateRoute>
-                <TeamDetail />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="settings"
-            element={
-              <PrivateRoute>
-                <Settings />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="account"
-            element={
-              <PrivateRoute>
-                <Account />
+                <Posts />
               </PrivateRoute>
             }
           />
         </Route>
 
-        <Route
-          path="*"
-          element={
-            <div>
-              <h2>Not found</h2>
-            </div>
-          }
-        />
+        <Route path={SIGN_IN} element={<SignIn />} />
+
+        <Route path={NOT_FOUND} element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

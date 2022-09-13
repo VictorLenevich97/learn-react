@@ -1,13 +1,7 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Counter } from "../components/Counter";
-import { useSelector, useDispatch } from "react-redux";
-
-import { login, logout } from "../store/rootStore/actions";
+import { Counter } from "../../components/Counter";
 
 export const Home = () => {
-  const isAuth = useSelector((store) => store.isAuth);
-  const dispatch = useDispatch();
-
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -21,20 +15,6 @@ export const Home = () => {
         }}
       >
         <h2>Home page</h2>
-        <div>
-          <span>Is allow teams: {isAuth ? "Is auth" : "No auth"}</span>{" "}
-          <button
-            onClick={() => {
-              if (isAuth) {
-                dispatch(logout());
-              } else {
-                dispatch(login());
-              }
-            }}
-          >
-            {isAuth ? "Logout" : "Login"}
-          </button>
-        </div>
       </div>
       <hr />
       <div>
