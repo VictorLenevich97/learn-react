@@ -1,9 +1,18 @@
 import { NavLink } from "react-router-dom";
 import { HOME, POSTS } from "../../constants/routes";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/mainStore/mainSlice";
 
 import "./header.css";
 
 export const Header = () => {
+  const dispatch = useDispatch();
+
+  const onLogout = () => {
+    localStorage.removeItem("isAuth");
+    dispatch(logout());
+  };
+
   return (
     <header className="header-container">
       <NavLink
@@ -20,6 +29,9 @@ export const Header = () => {
       >
         Posts{" "}
       </NavLink>
+      <button onClick={onLogout} className="header-button">
+        Logout
+      </button>
     </header>
   );
 };

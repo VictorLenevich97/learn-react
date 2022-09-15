@@ -1,16 +1,14 @@
 import { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPosts } from "../../store/postsStore/api";
+import { fetchPosts } from "../../store/postsStore/postsSlice";
 
 export const Posts = () => {
-  const { posts, isLoading, error } = useSelector(
-    (store) => store.postsReducer
-  );
+  const { posts, isLoading, error } = useSelector((store) => store.posts);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchPosts(dispatch);
+    dispatch(fetchPosts());
   }, [dispatch]);
 
   if (isLoading) {
@@ -18,7 +16,7 @@ export const Posts = () => {
   }
 
   if (error) {
-    return <div>Something happens :(</div>;
+    return <div>{"Something happens :("}</div>;
   }
 
   return (

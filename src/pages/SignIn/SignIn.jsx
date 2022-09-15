@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../../store/mainStore/actions";
+import { login } from "../../store/mainStore/mainSlice";
 
 import "./signin.css";
 
@@ -23,6 +23,7 @@ export const SignIn = () => {
     if (userName === mockUserName && password === mockPassword) {
       setIsInvalidForm(false);
       dispatch(login());
+      localStorage.setItem("isAuth", true);
       navigate("/");
     } else {
       setIsInvalidForm(true);
