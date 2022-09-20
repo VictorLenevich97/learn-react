@@ -1,8 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "../layouts/Layout";
 import { PrivateRoute } from "./PrivateRoute";
-import { Home, Posts, SignIn, NotFound } from "../pages";
-import { NOT_FOUND, SIGN_IN, POSTS, HOME } from "../constants/routes";
+import { Home, Posts, SignIn, NotFound, PostsSearch } from "../pages";
+import {
+  NOT_FOUND,
+  SIGN_IN,
+  POSTS,
+  HOME,
+  POSTS_SEARCH,
+} from "../constants/routes";
 
 export const MainRoutes = () => {
   return (
@@ -22,6 +28,14 @@ export const MainRoutes = () => {
             element={
               <PrivateRoute>
                 <Posts />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={POSTS_SEARCH}
+            element={
+              <PrivateRoute>
+                <PostsSearch />
               </PrivateRoute>
             }
           />

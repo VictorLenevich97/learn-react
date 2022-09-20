@@ -1,17 +1,21 @@
 import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPosts } from "../../store/postsStore/postsSlice";
 
 // import { fetchPosts } from "../../store/postsStore/api";
 
-export const Posts = () => {
+export const PostsSearch = () => {
   const { posts, isLoading, error } = useSelector((store) => store.posts);
   const dispatch = useDispatch();
+  const [params] = useSearchParams();
+
+  const searchValue = params.get("value");
 
   useEffect(() => {
-    dispatch(fetchPosts({}));
-  }, [dispatch]);
+    dispatch(fetchPosts({ search: searchValue }));
+  }, [dispatch, searchValue]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -23,6 +27,7 @@ export const Posts = () => {
 
   return (
     <div>
+      <h1>Search resuls {searchValue}</h1>
       {posts.map(({ id, title, text }) => (
         <div key={id}>
           <h2>{title}</h2>

@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { HOME, POSTS } from "../../constants/routes";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/mainStore/mainSlice";
+import { Search } from "../Search/Search";
 
 import "./header.css";
 
@@ -29,6 +30,10 @@ export const Header = () => {
       >
         Posts{" "}
       </NavLink>
+      <div className="search-item">
+        <Search />
+      </div>
+
       <button onClick={onLogout} className="header-button">
         Logout
       </button>
