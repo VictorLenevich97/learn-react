@@ -2,8 +2,7 @@ import { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPosts } from "../../store/postsStore/postsSlice";
-
-// import { fetchPosts } from "../../store/postsStore/api";
+import { PostItem } from "../../components";
 
 export const Posts = () => {
   const { posts, isLoading, error } = useSelector((store) => store.posts);
@@ -22,12 +21,9 @@ export const Posts = () => {
   }
 
   return (
-    <div>
+    <div className="grid grid-cols-3 gap-4 p-4">
       {posts.map(({ id, title, text }) => (
-        <div key={id}>
-          <h2>{title}</h2>
-          <span>{text}</span>
-        </div>
+        <PostItem key={id} title={title} text={text} />
       ))}
     </div>
   );

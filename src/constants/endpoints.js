@@ -1,1 +1,2 @@
-export const POSTS_LIST = "https://studapi.teachmeskills.by/blog/posts/";
+export const POSTS_LIST = "blog/posts/";
+export const AUTH_JWT_CREATE = "auth/jwt/create/";

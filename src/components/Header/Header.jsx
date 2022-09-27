@@ -1,40 +1,39 @@
-import { NavLink } from "react-router-dom";
-import { HOME, POSTS } from "../../constants/routes";
-import { useDispatch } from "react-redux";
-import { logout } from "../../store/mainStore/mainSlice";
-import { Search } from "../Search/Search";
-
-import "./header.css";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { SIGN_IN } from "../../constants/routes";
+import { logout } from "../../store/authStore/authSlice";
+// import { Search } from "../Search/Search";
 
 export const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isAuth = useSelector((store) => store.auth.isAuth);
 
   const onLogout = () => {
-    localStorage.removeItem("isAuth");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     dispatch(logout());
+
+    navigate(SIGN_IN);
   };
 
   return (
-    <header className="header-container">
-      <NavLink
-        className="header-item"
-        style={({ isActive }) => ({ color: isActive ? "yellow" : "white" })}
-        to={HOME}
-      >
-        Home{" "}
-      </NavLink>
-      <NavLink
-        className="header-item"
-        style={({ isActive }) => ({ color: isActive ? "yellow" : "white" })}
-        to={POSTS}
-      >
-        Posts{" "}
-      </NavLink>
-      <div className="search-item">
-        <Search />
-      </div>
+    <header className="bg-blue-600 p-4 flex justify-end items-center min-h-[4rem]">
+      {isAuth ? (
+        <span className="text-md text-white">User name</span>
+      ) : (
+        <Link
+          className="px-3 py-2 bg-white text-blue-600 rounded font-medium"
+          to={SIGN_IN}
+        >
+          Login
+        </Link>
+      )}
 
-      <button onClick={onLogout} className="header-button">
+      <button
+        className="ml-2 px-3 py-2 bg-white text-blue-600 rounded font-medium"
+        onClick={onLogout}
+      >
         Logout
       </button>
     </header>

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { SIGN_IN } from "../constants/routes";
 
 export const PrivateRoute = ({ children }) => {
-  const isAuth = useSelector((store) => store.main.isAuth);
+  const isAuth = useSelector((store) => store.auth.isAuth);
 
   if (!isAuth) {
     // redirect

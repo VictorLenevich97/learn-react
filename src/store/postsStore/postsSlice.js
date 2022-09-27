@@ -1,15 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { POSTS_LIST } from "../../constants/endpoints";
+import { publicAxios } from "../../utils/axios";
 
 export const fetchPosts = createAsyncThunk(
   "posts/fetchPosts",
   async ({ search, limit = 20 }, { rejectWithValue }) => {
     try {
       const queryString = new URLSearchParams({ search, limit }).toString();
-      const response = await fetch(
+      const { data } = await publicAxios.get(
         `${POSTS_LIST}?${!!search ? queryString : `limit=${limit}`}`
-      ).then((res) => res.json());
-      return response.results;
+      );
+
+      return data.results;
     } catch (error) {
       return rejectWithValue(error);
     }
