@@ -4,7 +4,11 @@ import { Layout } from "../layouts/Layout";
 import { Posts, SignIn, NotFound, PostsSearch } from "../pages";
 import { NOT_FOUND, SIGN_IN, HOME, POSTS_SEARCH } from "../constants/routes";
 
+import { useRefreshToken } from "../hooks";
+
 export const MainRoutes = () => {
+  useRefreshToken();
+
   return (
     <BrowserRouter>
       <Routes>

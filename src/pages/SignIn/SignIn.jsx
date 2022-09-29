@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { signInAsync } from "../../store/authStore/authSlice";
+import { useSelector } from "react-redux";
 import { HOME } from "../../constants/routes";
+import { useAuth } from "../../hooks";
 
 import { Title } from "../../components";
 
 export const SignIn = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { onLogin } = useAuth();
+
   const isAuth = useSelector((store) => store.auth.isAuth);
 
   const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ export const SignIn = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(signInAsync({ email, password }));
+    onLogin({ email, password });
   };
 
   return (

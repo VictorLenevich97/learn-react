@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ACCESS_TOKEN } from "../constants/common";
 
 const BASE_URL = "https://studapi.teachmeskills.by/";
 
@@ -12,6 +13,6 @@ export const privateAxios = axios.create({
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
   },
 });

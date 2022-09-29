@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPosts } from "../../store/postsStore/postsSlice";
+import { fetchPostsAsync } from "../../store/postsStore/postsSlice";
 
 // import { fetchPosts } from "../../store/postsStore/api";
 
@@ -14,7 +14,7 @@ export const PostsSearch = () => {
   const searchValue = params.get("value");
 
   useEffect(() => {
-    dispatch(fetchPosts({ search: searchValue }));
+    dispatch(fetchPostsAsync({ search: searchValue }));
   }, [dispatch, searchValue]);
 
   if (isLoading) {

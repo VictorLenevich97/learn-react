@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { POSTS_LIST } from "../../constants/endpoints";
 import { publicAxios } from "../../utils/axios";
 
-export const fetchPosts = createAsyncThunk(
-  "posts/fetchPosts",
+export const fetchPostsAsync = createAsyncThunk(
+  "posts/fetchPostsAsync",
   async ({ search, limit = 20 }, { rejectWithValue }) => {
     try {
       const queryString = new URLSearchParams({ search, limit }).toString();
@@ -28,14 +28,14 @@ const postsSlise = createSlice({
   name: "posts",
   initialState,
   extraReducers: {
-    [fetchPosts.pending.type]: (state) => {
+    [fetchPostsAsync.pending.type]: (state) => {
       state.isLoading = true;
     },
-    [fetchPosts.fulfilled.type]: (state, action) => {
+    [fetchPostsAsync.fulfilled.type]: (state, action) => {
       state.isLoading = false;
       state.posts = action.payload;
     },
-    [fetchPosts.rejected.type]: (state, action) => {
+    [fetchPostsAsync.rejected.type]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

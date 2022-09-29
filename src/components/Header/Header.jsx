@@ -1,26 +1,37 @@
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { SIGN_IN } from "../../constants/routes";
-import { logout } from "../../store/authStore/authSlice";
+import { fetchUserDetailAsync } from "../../store/userStore/userSlice";
+import { useAuth } from "../../hooks";
+
 // import { Search } from "../Search/Search";
 
 export const Header = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { onLogout } = useAuth();
+
   const isAuth = useSelector((store) => store.auth.isAuth);
+  const userDetail = useSelector((store) => store.user.userDetail);
 
-  const onLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    dispatch(logout());
-
-    navigate(SIGN_IN);
-  };
+  useEffect(() => {
+    if (isAuth) {
+      dispatch(fetchUserDetailAsync());
+    }
+  }, [dispatch, isAuth]);
 
   return (
     <header className="bg-blue-600 p-4 flex justify-end items-center min-h-[4rem]">
       {isAuth ? (
-        <span className="text-md text-white">User name</span>
+        <>
+          <span className="text-md text-white">{userDetail?.username}</span>
+          <button
+            className="ml-2 px-3 py-2 bg-white text-blue-600 rounded font-medium"
+            onClick={onLogout}
+          >
+            Logout
+          </button>
+        </>
       ) : (
         <Link
           className="px-3 py-2 bg-white text-blue-600 rounded font-medium"
@@ -29,13 +40,6 @@ export const Header = () => {
           Login
         </Link>
       )}
-
-      <button
-        className="ml-2 px-3 py-2 bg-white text-blue-600 rounded font-medium"
-        onClick={onLogout}
-      >
-        Logout
-      </button>
     </header>
   );
 };

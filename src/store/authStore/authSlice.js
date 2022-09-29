@@ -3,6 +3,7 @@ import { publicAxios, privateAxios } from "../../utils/axios";
 import { AUTH_JWT_CREATE } from "../../constants/endpoints";
 
 const initialState = {
+  accessToken: localStorage.getItem("accessToken") || false,
   isAuth: !!localStorage.getItem("accessToken") || false,
   isLoading: false,
   error: null,
@@ -26,15 +27,13 @@ export const signInAsync = createAsyncThunk(
   }
 );
 
-const mainSlice = createSlice({
-  name: "main",
+const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
-    login(state) {
-      state.isAuth = true;
-    },
     logout(state) {
       state.isAuth = false;
+      state.accessToken = "";
     },
   },
   extraReducers: {
@@ -44,6 +43,7 @@ const mainSlice = createSlice({
     [signInAsync.fulfilled.type]: (state, action) => {
       state.isLoading = false;
       state.isAuth = true;
+      state.accessToken = action.payload.access;
     },
     [signInAsync.rejected.type]: (state, action) => {
       state.isLoading = false;
@@ -52,5 +52,5 @@ const mainSlice = createSlice({
   },
 });
 
-export const { login, logout } = mainSlice.actions;
-export default mainSlice.reducer;
+export const { logout } = authSlice.actions;
+export default authSlice.reducer;
