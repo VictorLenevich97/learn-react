@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { ACCESS_TOKEN } from "../constants/common";
 
 const BASE_URL = "https://studapi.teachmeskills.by/";
