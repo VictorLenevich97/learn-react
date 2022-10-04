@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPostsAsync } from "../../store/postsStore/postsSlice";
 
-// import { fetchPosts } from "../../store/postsStore/api";
+import { fetchPostsAsync } from "../../store/postsStore/postsSlice";
+import { PostItem, Title, BackStep } from "../../components";
 
 export const PostsSearch = () => {
   const { posts, isLoading, error } = useSelector((store) => store.posts);
@@ -27,13 +26,17 @@ export const PostsSearch = () => {
 
   return (
     <div>
-      <h1>Search resuls {searchValue}</h1>
-      {posts.map(({ id, title, text }) => (
-        <div key={id}>
-          <h2>{title}</h2>
-          <span>{text}</span>
-        </div>
-      ))}
+      <BackStep content="Back" />
+
+      <div className="mb-5">
+        <Title content={`Search resuls ${searchValue}`} />
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        {posts.map(({ id, title, text, image }) => (
+          <PostItem key={id} id={id} title={title} text={text} image={image} />
+        ))}
+      </div>
     </div>
   );
 };

@@ -5,8 +5,6 @@ import { SIGN_IN } from "../../constants/routes";
 import { fetchUserDetailAsync } from "../../store/userStore/userSlice";
 import { useAuth } from "../../hooks";
 
-// import { Search } from "../Search/Search";
-
 export const Header = () => {
   const dispatch = useDispatch();
   const { onLogout } = useAuth();

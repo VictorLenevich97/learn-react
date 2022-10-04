@@ -1,8 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "../layouts/Layout";
 // import { PrivateRoute } from "./PrivateRoute";
-import { Posts, SignIn, NotFound, PostsSearch } from "../pages";
-import { NOT_FOUND, SIGN_IN, HOME, POSTS_SEARCH } from "../constants/routes";
+import { Posts, SignIn, NotFound, PostsSearch, PostDetail } from "../pages";
+import {
+  NOT_FOUND,
+  SIGN_IN,
+  HOME,
+  POSTS_SEARCH,
+  POSTS,
+} from "../constants/routes";
 
 import { useRefreshToken } from "../hooks";
 
@@ -15,10 +21,10 @@ export const MainRoutes = () => {
         <Route path={HOME} element={<Layout />}>
           <Route index element={<Posts />} />
           <Route path={POSTS_SEARCH} element={<PostsSearch />} />
+          <Route path={`${POSTS}/:postId`} element={<PostDetail />} />
         </Route>
 
         <Route path={SIGN_IN} element={<SignIn />} />
-
         <Route path={NOT_FOUND} element={<NotFound />} />
       </Routes>
     </BrowserRouter>

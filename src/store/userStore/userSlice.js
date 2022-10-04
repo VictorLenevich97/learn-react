@@ -1,39 +1,38 @@
-import { createReducer, createAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateAxios } from "../../utils/axios";
 import { AUTH_USERS_ME } from "../../constants/endpoints";
 
-const fetchUserLoading = createAction("fetchUserLoading");
-const fetchUserSuccess = createAction("fetchUserSuccess");
-const fecthUserError = createAction("fecthUserError");
-
-export const fetchUserDetailAsync = () => {
-  return async (dispatch) => {
+export const fetchUserDetailAsync = createAsyncThunk(
+  "user/fetchUserDetailAsync",
+  async (_, { rejectWithValue }) => {
     try {
-      dispatch(fetchUserLoading());
       const { data } = await privateAxios.get(AUTH_USERS_ME);
 
-      dispatch(fetchUserSuccess(data));
+      return data;
     } catch (error) {
-      dispatch(fecthUserError(error));
+      return rejectWithValue(error);
     }
-  };
-};
+  }
+);
 
 const initialState = { userDetail: null, isLoading: false, error: null };
 
-const userReducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(fetchUserLoading, (state) => {
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  extraReducers: {
+    [fetchUserDetailAsync.pending.type]: (state) => {
       state.isLoading = true;
-    })
-    .addCase(fetchUserSuccess, (state, action) => {
+    },
+    [fetchUserDetailAsync.fulfilled.type]: (state, action) => {
       state.isLoading = false;
       state.userDetail = action.payload;
-    })
-    .addCase(fecthUserError, (state, action) => {
+    },
+    [fetchUserDetailAsync.rejected.type]: (state, action) => {
       state.isLoading = false;
-      state.error = action.error;
-    });
+      state.error = action.payload;
+    },
+  },
 });
 
-export default userReducer;
+export default userSlice.reducer;
