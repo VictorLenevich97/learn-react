@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchPostsAsync } from "../../store/postsStore/postsSlice";
+import { initPostsAsync } from "../../store/postsStore/postsSlice";
 import { PostItem, Title, BackStep } from "../../components";
 
 export const PostsSearch = () => {
@@ -13,7 +13,9 @@ export const PostsSearch = () => {
   const searchValue = params.get("value");
 
   useEffect(() => {
-    dispatch(fetchPostsAsync({ search: searchValue }));
+    dispatch(
+      initPostsAsync({ params: { search: searchValue }, isShowLoader: true })
+    );
   }, [dispatch, searchValue]);
 
   if (isLoading) {

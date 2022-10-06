@@ -1,19 +1,26 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { POSTS_LIST } from "../../constants/endpoints";
 import { publicAxios } from "../../utils/axios";
+import { POSTS_LIMIT } from "../../constants/common";
+import { createSearchParams } from "react-router-dom";
 
-export const fetchPostsAsync = createAsyncThunk(
-  "posts/fetchPostsAsync",
-  async ({ search, limit = 20, ordering }, { rejectWithValue }) => {
+export const initPostsAsync = createAsyncThunk(
+  "posts/initPostsAsync",
+  async ({ params, isShowLoader }, { rejectWithValue }) => {
     try {
-      const queryString = new URLSearchParams({ search, limit }).toString();
+      let queryParams = {
+        limit: POSTS_LIMIT,
+      };
+
+      if (params) {
+        queryParams = { ...queryParams, ...params };
+      }
+
       const { data } = await publicAxios.get(
-        `${POSTS_LIST}?${
-          !!search ? queryString : `limit=${limit}&ordering=${ordering}`
-        }`
+        `${POSTS_LIST}?${createSearchParams(queryParams)}`
       );
 
-      return data.results;
+      return { data, isShowLoader };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -36,6 +43,7 @@ export const fetchPostDetailAsync = createAsyncThunk(
 const initialState = {
   isLoading: false,
   posts: [],
+  postsCount: 0,
   postDetail: null,
   error: null,
 };
@@ -44,14 +52,22 @@ const postsSlise = createSlice({
   name: "posts",
   initialState,
   extraReducers: {
-    [fetchPostsAsync.pending.type]: (state) => {
-      state.isLoading = true;
+    [initPostsAsync.pending.type]: (state, action) => {
+      state.isLoading = action.meta.arg.isShowLoader;
     },
-    [fetchPostsAsync.fulfilled.type]: (state, action) => {
+    [initPostsAsync.fulfilled.type]: (
+      state,
+      {
+        payload: {
+          data: { results, count },
+        },
+      }
+    ) => {
       state.isLoading = false;
-      state.posts = action.payload;
+      state.posts = results;
+      state.postsCount = count;
     },
-    [fetchPostsAsync.rejected.type]: (state, action) => {
+    [initPostsAsync.rejected.type]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

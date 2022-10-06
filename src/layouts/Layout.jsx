@@ -3,7 +3,7 @@ import { Header } from "../components/Header/Header";
 
 export const Layout = () => {
   return (
-    <div>
+    <div className="h-screen bg-gray-100">
       <Header />
       <main className="p-4">
         <Outlet />

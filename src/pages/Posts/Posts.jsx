@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
-
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPostsAsync } from "../../store/postsStore/postsSlice";
-import { PostItem, Title, Search, Dropdown } from "../../components";
+import {
+  initPostsAsync,
+  fetchMorePostsAsync,
+} from "../../store/postsStore/postsSlice";
+import {
+  PostItem,
+  Title,
+  Search,
+  Dropdown,
+  Pagination,
+} from "../../components";
+import { POSTS_LIMIT } from "../../constants/common";
 
 const sortItems = [
   { id: 1, name: "Author", value: "author" },
@@ -11,16 +20,26 @@ const sortItems = [
 ];
 
 export const Posts = () => {
-  const { posts, isLoading, error } = useSelector((store) => store.posts);
+  const { posts, isLoading, error, postsCount } = useSelector(
+    (store) => store.posts
+  );
   const dispatch = useDispatch();
 
-  const [dropdownValue, setDropdownValue] = useState(sortItems[0].value);
-
-  console.log("dropdownValue", dropdownValue);
+  const [offset, setOffset] = useState(0);
+  const [ordering, setOrdering] = useState(sortItems[0].value); // Should check it
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchPostsAsync({ ordering: dropdownValue }));
-  }, [dispatch, dropdownValue]);
+    dispatch(initPostsAsync({ params: {}, isShowLoader: true }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (offset !== 0) {
+      dispatch(
+        initPostsAsync({ params: { offset, ordering }, isShowLoader: false })
+      );
+    }
+  }, [dispatch, offset]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -44,15 +63,41 @@ export const Posts = () => {
         <Dropdown
           title="Sort by"
           items={sortItems}
-          dropdownValue={dropdownValue}
-          setDropdownValue={setDropdownValue}
+          onSelect={(value) => {
+            dispatch(
+              initPostsAsync({
+                params: { limit: posts.length, ordering: value },
+                isShowLoader: false,
+              })
+            );
+            setOrdering(value);
+          }}
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {posts.map(({ id, title, text, image }) => (
           <PostItem key={id} id={id} title={title} text={text} image={image} />
         ))}
+      </div>
+
+      <div className="flex justify-center mt-10">
+        <Pagination
+          onNext={() => {
+            setPage(page + 1);
+            setOffset(page * POSTS_LIMIT);
+          }}
+          onPrev={() => {
+            setPage(page - 1);
+            setOffset((page - 2) * POSTS_LIMIT);
+          }}
+          onPage={(value) => {
+            setPage(value);
+            setOffset((value - 1) * POSTS_LIMIT);
+          }}
+          currentPage={page}
+          pagesCount={Math.ceil(postsCount / POSTS_LIMIT)}
+        />
       </div>
     </>
   );
