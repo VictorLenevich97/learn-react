@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { publicAxios, privateAxios } from "../../utils/axios";
-import { AUTH_JWT_CREATE } from "../../constants/endpoints";
+import { AUTH_JWT_CREATE, AUTH_ACTIVATE } from "../../constants/endpoints";
 
 const initialState = {
   accessToken: localStorage.getItem("accessToken") || false,
   isAuth: !!localStorage.getItem("accessToken") || false,
   isLoading: false,
   error: null,
+  isActivationLoading: true,
+  activationStatus: null,
 };
 
 export const signInAsync = createAsyncThunk(
@@ -21,6 +23,17 @@ export const signInAsync = createAsyncThunk(
       privateAxios.defaults.headers.Authorization = `Bearer ${data.access}`;
 
       return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const activateAsync = createAsyncThunk(
+  "auth/activateAsync",
+  async ({ token, uid }, { rejectWithValue }) => {
+    try {
+      await publicAxios.post(AUTH_ACTIVATE, { token, uid });
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -48,6 +61,15 @@ const authSlice = createSlice({
     [signInAsync.rejected.type]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    },
+
+    [activateAsync.fulfilled.type]: (state) => {
+      state.isActivationLoading = false;
+      state.activationStatus = "active";
+    },
+    [activateAsync.rejected.type]: (state) => {
+      state.isActivationLoading = false;
+      state.activationStatus = "no-active";
     },
   },
 });
