@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 export const BackStep = ({ content }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <button
       data-testid="back-button"
-      onClick={() => console.log("")}
+      onClick={() => navigate(-1)}
       className="flex items-center mb-5"
     >
       <span className="pr-2">{"<-"}</span>

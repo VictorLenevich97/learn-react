@@ -2,8 +2,9 @@ import PropTypes from "prop-types";
 import { ArrowIcon } from "../Icons";
 import { Link } from "react-router-dom";
 import { POSTS } from "../../constants/routes";
+import { IPost } from "../../types/post";
 
-export const PostItem = ({ id, title, text, image }) => {
+export const PostItem = ({ id, title, text, image }: IPost) => {
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-md">
       <img

@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  initPostsAsync,
-  fetchMorePostsAsync,
-} from "../../store/postsStore/postsSlice";
+import { initPostsAsync } from "../../store/postsStore/postsSlice";
 import {
   PostItem,
   Title,
@@ -12,6 +9,7 @@ import {
   Pagination,
 } from "../../components";
 import { POSTS_LIMIT } from "../../constants/common";
+import { AppStateType, AppDispatchType } from "../../store/store";
 
 const sortItems = [
   { id: 1, name: "Author", value: "author" },
@@ -21,9 +19,9 @@ const sortItems = [
 
 export const Posts = () => {
   const { posts, isLoading, error, postsCount } = useSelector(
-    (store) => store.posts
+    (store: AppStateType) => store.posts
   );
-  const dispatch = useDispatch();
+  const dispatch: AppDispatchType = useDispatch();
 
   const [offset, setOffset] = useState(0);
   const [ordering, setOrdering] = useState(sortItems[0].value); // Should check it
@@ -91,7 +89,7 @@ export const Posts = () => {
             setPage(page - 1);
             setOffset((page - 2) * POSTS_LIMIT);
           }}
-          onPage={(value) => {
+          onPage={(value: number) => {
             setPage(value);
             setOffset((value - 1) * POSTS_LIMIT);
           }}

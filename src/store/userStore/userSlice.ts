@@ -1,6 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateAxios } from "../../utils/axios";
 import { AUTH_USERS_ME } from "../../constants/endpoints";
+import { IPost } from "../../types/post";
+
+interface IUserSliceInitialState {
+  userDetail: IPost | null;
+  isLoading: boolean;
+  error: any;
+}
 
 export const fetchUserDetailAsync = createAsyncThunk(
   "user/fetchUserDetailAsync",
@@ -15,11 +22,16 @@ export const fetchUserDetailAsync = createAsyncThunk(
   }
 );
 
-const initialState = { userDetail: null, isLoading: false, error: null };
+const initialState: IUserSliceInitialState = {
+  userDetail: null,
+  isLoading: false,
+  error: null,
+};
 
 const userSlice = createSlice({
   name: "user",
   initialState,
+  reducers: {},
   extraReducers: {
     [fetchUserDetailAsync.pending.type]: (state) => {
       state.isLoading = true;

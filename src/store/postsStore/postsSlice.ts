@@ -3,12 +3,33 @@ import { POSTS_LIST } from "../../constants/endpoints";
 import { publicAxios } from "../../utils/axios";
 import { POSTS_LIMIT } from "../../constants/common";
 import { createSearchParams } from "react-router-dom";
+import { IPost } from "../../types/post";
+
+interface IPostsSliceInitialState {
+  isLoading: boolean;
+  posts: IPost[];
+  postsCount: number;
+  postDetail: IPost | null;
+  error: any;
+}
+
+interface IPostParams<T = number> {
+  limit?: T;
+  author?: T;
+  lesson_num?: T;
+  offset?: T;
+  ordering?: string;
+  search?: string;
+}
 
 export const initPostsAsync = createAsyncThunk(
   "posts/initPostsAsync",
-  async ({ params, isShowLoader }, { rejectWithValue }) => {
+  async (
+    { params, isShowLoader }: { params: IPostParams; isShowLoader: boolean },
+    { rejectWithValue }
+  ) => {
     try {
-      let queryParams = {
+      let queryParams: IPostParams = {
         limit: POSTS_LIMIT,
       };
 
@@ -17,7 +38,7 @@ export const initPostsAsync = createAsyncThunk(
       }
 
       const { data } = await publicAxios.get(
-        `${POSTS_LIST}?${createSearchParams(queryParams)}`
+        `${POSTS_LIST}?${createSearchParams(queryParams as any)}`
       );
 
       return { data, isShowLoader };
@@ -29,7 +50,7 @@ export const initPostsAsync = createAsyncThunk(
 
 export const fetchPostDetailAsync = createAsyncThunk(
   "post/fetchPostDetailAsync",
-  async ({ postId }, { rejectWithValue }) => {
+  async ({ postId }: { postId: number }, { rejectWithValue }) => {
     try {
       const { data } = await publicAxios.get(`${POSTS_LIST}/${postId}/`);
 
@@ -40,7 +61,7 @@ export const fetchPostDetailAsync = createAsyncThunk(
   }
 );
 
-const initialState = {
+const initialState: IPostsSliceInitialState = {
   isLoading: false,
   posts: [],
   postsCount: 0,
@@ -51,6 +72,7 @@ const initialState = {
 const postsSlise = createSlice({
   name: "posts",
   initialState,
+  reducers: {},
   extraReducers: {
     [initPostsAsync.pending.type]: (state, action) => {
       state.isLoading = action.meta.arg.isShowLoader;
@@ -85,7 +107,5 @@ const postsSlise = createSlice({
     },
   },
 });
-
-export const { postsLoading, postsSuccess, postsError } = postsSlise.actions;
 
 export default postsSlise.reducer;

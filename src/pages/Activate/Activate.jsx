@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { SIGN_IN } from "../../constants/routes";
+import { UserStatus } from "../../types/auth";
 
 import { activateAsync } from "../../store/authStore/authSlice";
 
@@ -21,14 +22,13 @@ export const Activate = () => {
     <div className="bg-blue-500 w-full h-screen flex items-center justify-center text-white text-2xl">
       {isActivationLoading ? (
         <div>Loading...</div>
-      ) : activationStatus === "active" ? (
+      ) : activationStatus === UserStatus.ACTIVE ? (
         <div>
           <span>You are active!</span>
           <Link
             className="block bg-indigo-700 text-center mt-5 py-3 rounded-sm"
             to={SIGN_IN}
           >
-            {" "}
             Go to login
           </Link>
         </div>
@@ -38,5 +38,3 @@ export const Activate = () => {
     </div>
   );
 };
-
-//http://studapi.teachmeskills.by//activate/ODI4/bd58f2-135ab864c3d113a0186ec6d8fbe05207

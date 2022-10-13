@@ -1,10 +1,18 @@
+interface IPagination {
+  pagesCount: number;
+  onNext(): void;
+  onPage(value: number): void;
+  onPrev(): void;
+  currentPage: number;
+}
+
 export const Pagination = ({
   pagesCount = 5,
   onNext,
   onPrev,
   onPage,
   currentPage,
-}) => {
+}: IPagination) => {
   const buttonStyle =
     "p-4 bg-blue-500 text-white rounded-xl hover:bg-blue-700 disabled:bg-gray-500 disabled:text-black disabled:cursor-not-allowed";
 
