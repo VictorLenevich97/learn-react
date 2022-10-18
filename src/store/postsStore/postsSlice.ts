@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { POSTS_LIST } from "../../constants/endpoints";
-import { publicAxios } from "../../utils/axios";
+import { BLOG_POSTS } from "../../constants/endpoints";
+import { privateAxios, publicAxios } from "../../utils/axios";
 import { POSTS_LIMIT } from "../../constants/common";
 import { createSearchParams } from "react-router-dom";
 import { IPost } from "../../types/post";
@@ -11,6 +11,8 @@ interface IPostsSliceInitialState {
   postsCount: number;
   postDetail: IPost | null;
   error: any;
+  createPostLoading: boolean;
+  createdPostData: null | IPost;
 }
 
 interface IPostParams<T = number> {
@@ -38,7 +40,7 @@ export const initPostsAsync = createAsyncThunk(
       }
 
       const { data } = await publicAxios.get(
-        `${POSTS_LIST}?${createSearchParams(queryParams as any)}`
+        `${BLOG_POSTS}?${createSearchParams(queryParams as any)}`
       );
 
       return { data, isShowLoader };
@@ -52,7 +54,22 @@ export const fetchPostDetailAsync = createAsyncThunk(
   "post/fetchPostDetailAsync",
   async ({ postId }: { postId: number }, { rejectWithValue }) => {
     try {
-      const { data } = await publicAxios.get(`${POSTS_LIST}/${postId}/`);
+      const { data } = await publicAxios.get(`${BLOG_POSTS}/${postId}/`);
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const addPostAsync = createAsyncThunk(
+  "post/addPostAsync",
+  async (body: any, { rejectWithValue }) => {
+    try {
+      const { data } = await privateAxios.post(BLOG_POSTS, body, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       return data;
     } catch (error) {
@@ -66,6 +83,8 @@ const initialState: IPostsSliceInitialState = {
   posts: [],
   postsCount: 0,
   postDetail: null,
+  createPostLoading: false,
+  createdPostData: null,
   error: null,
 };
 
@@ -103,6 +122,18 @@ const postsSlise = createSlice({
     },
     [fetchPostDetailAsync.rejected.type]: (state, action) => {
       state.isLoading = false;
+      state.error = action.payload;
+    },
+
+    [addPostAsync.pending.type]: (state) => {
+      state.createPostLoading = true;
+    },
+    [addPostAsync.fulfilled.type]: (state, { payload }) => {
+      state.createPostLoading = false;
+      state.createdPostData = payload;
+    },
+    [addPostAsync.rejected.type]: (state, action) => {
+      state.createPostLoading = false;
       state.error = action.payload;
     },
   },

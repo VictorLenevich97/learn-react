@@ -4,8 +4,3 @@ export interface IPost {
   text: string;
   image: string;
 }
-
-enum UserStatus {
-  ACTIVE = "active",
-  NO_ACTIVE = "no-active",
-}

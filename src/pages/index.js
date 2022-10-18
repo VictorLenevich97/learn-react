@@ -4,3 +4,4 @@ export { NotFound } from "./NotFound/NotFound";
 export { PostsSearch } from "./PostsSearch/PostsSearch";
 export { PostDetail } from "./PostDetail/PostDetail";
 export { Activate } from "./Activate/Activate";
+export { CreatePost } from "./CreatePost/CreatePost";

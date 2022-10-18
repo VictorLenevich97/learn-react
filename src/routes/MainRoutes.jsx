@@ -8,6 +8,7 @@ import {
   PostsSearch,
   PostDetail,
   Activate,
+  CreatePost,
 } from "../pages";
 import {
   NOT_FOUND,
@@ -16,6 +17,7 @@ import {
   POSTS_SEARCH,
   POSTS,
   ACTIVATE,
+  CREATE_POST,
 } from "../constants/routes";
 
 import { useRefreshToken } from "../hooks";
@@ -30,6 +32,7 @@ export const MainRoutes = () => {
           <Route index element={<Posts />} />
           <Route path={POSTS_SEARCH} element={<PostsSearch />} />
           <Route path={`${POSTS}/:postId`} element={<PostDetail />} />
+          <Route path={CREATE_POST} element={<CreatePost />} />
         </Route>
 
         <Route path={`${ACTIVATE}/:uid/:token`} element={<Activate />} />

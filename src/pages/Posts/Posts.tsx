@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { initPostsAsync } from "../../store/postsStore/postsSlice";
 import {
   PostItem,
@@ -9,7 +8,7 @@ import {
   Pagination,
 } from "../../components";
 import { POSTS_LIMIT } from "../../constants/common";
-import { AppStateType, AppDispatchType } from "../../store/store";
+import { useStore } from "../../hooks/useStore/useStore";
 
 const sortItems = [
   { id: 1, name: "Author", value: "author" },
@@ -18,10 +17,8 @@ const sortItems = [
 ];
 
 export const Posts = () => {
-  const { posts, isLoading, error, postsCount } = useSelector(
-    (store: AppStateType) => store.posts
-  );
-  const dispatch: AppDispatchType = useDispatch();
+  const { store, dispatch } = useStore();
+  const { posts, isLoading, error, postsCount } = store.posts;
 
   const [offset, setOffset] = useState(0);
   const [ordering, setOrdering] = useState(sortItems[0].value); // Should check it

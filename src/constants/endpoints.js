@@ -1,4 +1,4 @@
-export const POSTS_LIST = "blog/posts/";
+export const BLOG_POSTS = "blog/posts/";
 
 export const AUTH_JWT_CREATE = "auth/jwt/create/";
 export const AUTH_USERS_ME = "auth/users/me/";

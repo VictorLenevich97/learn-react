@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateAxios } from "../../utils/axios";
 import { AUTH_USERS_ME } from "../../constants/endpoints";
-import { IPost } from "../../types/post";
+import { IUser } from "../../types/user";
 
 interface IUserSliceInitialState {
-  userDetail: IPost | null;
+  userDetail: IUser | null;
   isLoading: boolean;
   error: any;
 }

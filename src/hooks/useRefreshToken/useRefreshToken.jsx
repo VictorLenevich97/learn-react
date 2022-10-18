@@ -1,11 +1,13 @@
 import { useLayoutEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { privateAxios, publicAxios } from "../../utils/axios";
 import { AUTH_JWT_VERIFY, AUTH_JWT_REFRESH } from "../../constants/endpoints";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants/common";
+import { logout } from "../../store/authStore/authSlice";
 
 export const useRefreshToken = () => {
   const { accessToken, isAuth } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
 
   const getAuthorizationToken = (token) => `Bearer ${token}`;
 
@@ -35,6 +37,7 @@ export const useRefreshToken = () => {
                 Authorization: getAuthorizationToken(data.access),
               };
             } catch (error) {
+              dispatch(logout());
               Promise.reject(error);
             }
           }
